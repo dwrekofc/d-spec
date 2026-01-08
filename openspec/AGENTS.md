@@ -4,12 +4,12 @@ Instructions for AI coding assistants using d-spec for spec-driven development.
 
 ## TL;DR Quick Checklist
 
-- Search existing work: `d-spec spec list --long`, `d-spec list` (use `rg` only for full-text search)
+- Search existing work: use `rg` only for full-text search
 - Decide scope: new capability vs modify existing capability
 - Pick a unique `change-id`: kebab-case, verb-led, date-stamped (`add-`, `update-`, `remove-`, `refactor-`), format `<verb>-<slug>-YYYY-MM-DD`. Existing non-dated change IDs are grandfathered; new changes must use the date-stamped format.
 - Scaffold: `proposal.md`, `tasks.md`, `design.md` (only if needed), and delta specs per affected capability
 - Write deltas: use `## ADDED|MODIFIED|REMOVED|RENAMED Requirements`; include at least one `#### Scenario:` per requirement
-- Validate: `d-spec validate [change-id] --strict` and fix issues
+
 - Request approval: Do not start implementation until proposal is approved
 
 ## Three-Stage Workflow
@@ -71,16 +71,12 @@ After successfully executing Beads epics/tasks (and any required deployment), cr
 - Confirm all Beads tasks are closed and acceptance criteria verified, then run `bd sync`
 - Move `.d-spec/planning/changes/[name]/` → `.d-spec/planning/archive/YYYY-MM-DD-[name]/`
 - Confirm archived change specs under `.d-spec/planning/archive/` are correct
-- Use `d-spec archive <change-id> --skip-specs --yes` for tooling-only changes (always pass the change ID explicitly)
-- Run `d-spec validate --strict` to confirm the archived change passes checks
 Note: This is separate from archiving idea docs in `.d-spec/planning/ideas/archive/`, which happens after proposal approval.
 
 
 
 ### Search Guidance
-- Enumerate changes: `d-spec list`
 - Show details:
-  - Change: `d-spec show <change-id> --json --deltas-only`
 - Full-text search (use ripgrep): `rg -n "Requirement:|Scenario:" .d-spec/planning/changes .d-spec/planning/archive`
 
 
@@ -263,49 +259,7 @@ Example for RENAMED:
 
 **Silent scenario parsing failures**
 - Exact format required: `#### Scenario: Name`
-- Debug with: `d-spec show [change] --json --deltas-only`
 
-### Validation Tips
-
-```bash
-# Always use strict mode for comprehensive checks
-d-spec validate [change] --strict
-
-# Debug delta parsing
-d-spec show [change] --json | jq '.deltas'
-
-# Check specific requirement
-# d-spec show [spec] --json -r 1
-```
-
-## Happy Path Script
-
-```bash
-# 1) Explore current state
-d-spec list
-# Optional full-text search:
-# rg -n "Requirement:|Scenario:" .d-spec/planning/changes .d-spec/planning/archive
-
-# 2) Choose change id and scaffold
-CHANGE=add-two-factor-auth
-mkdir -p .d-spec/planning/changes/$CHANGE/{specs/auth}
-printf "## Why\n...\n\n## What Changes\n- ...\n\n## Impact\n- ...\n" > .d-spec/planning/changes/$CHANGE/proposal.md
-printf "## 1. Implementation\n- [ ] 1.1 ...\n" > .d-spec/planning/changes/$CHANGE/tasks.md
-
-# 3) Add deltas (example)
-cat > .d-spec/planning/changes/$CHANGE/specs/auth/spec.md << 'EOF'
-## ADDED Requirements
-### Requirement: Two-Factor Authentication
-Users MUST provide a second factor during login.
-
-#### Scenario: OTP required
-- **WHEN** valid credentials are provided
-- **THEN** an OTP challenge is required
-EOF
-
-# 4) Validate
-d-spec validate $CHANGE --strict
-```
 
 ## Multi-Capability Example
 
@@ -375,18 +329,6 @@ Only add complexity with:
 
 ## Error Recovery
 
-### Change Conflicts
-1. Run `d-spec list` to see active changes
-2. Check for overlapping changes in `.d-spec/planning/changes/` and `.d-spec/planning/archive/`
-3. Coordinate with change owners
-4. Consider combining proposals
-
-### Validation Failures
-1. Run with `--strict` flag
-2. Check JSON output for details
-3. Verify spec file format
-4. Ensure scenarios properly formatted
-
 ### Missing Context
 1. Read `.d-spec/project.md` first
 2. Check related change specs under `.d-spec/planning/changes/`
@@ -405,12 +347,6 @@ Only add complexity with:
 - `design.md` - Technical decisions
 - `spec.md` - Requirements and behavior
 
-### CLI Essentials
-```bash
-d-spec list              # What's in progress?
-d-spec show [item]       # View details
-d-spec validate --strict # Is it correct?
-d-spec archive <change-id> [--yes|-y]  # Mark complete (add --yes for automation)
-```
+
 
 Remember: Specs are truth. Changes are proposals. Keep them in sync.
