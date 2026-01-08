@@ -62,6 +62,10 @@
 - **Performance Tests**: Search benchmarks, sync latency, export throughput
 - **Test Data**: Synthetic datasets + real-world anonymized data
 
+**TDD Policy**:
+- Default to tests-first for code changes unless explicitly exempted in the task description.
+- Encode TDD in issues: Acceptance Criteria are tests, and larger work splits into Red → Green → Refactor tasks with dependencies.
+
 **Testing Tools**:
 - XCTest framework
 - Quick/Nimble (if needed for BDD)

@@ -57,7 +57,8 @@ Target questions:
    - `.d-spec/planning/changes/<change-id>/specs/<capability>/spec.md` deltas (one per impacted capability)
    - `.d-spec/planning/changes/<change-id>/design.md` when needed
 3. Ensure each new/modified requirement includes at least one scenario.
-4. Run: `d-spec validate <change-id> --strict` and fix issues.
+4. Encode TDD expectations in `tasks.md`: acceptance criteria should be tests, and for larger work split Red → Green → Refactor into ordered tasks or dependencies.
+5. Run: `d-spec validate <change-id> --strict` and fix issues.
 
 Approval gate:
 - Do not generate Beads issues or start implementation until the user approves the proposal in chat.
@@ -70,7 +71,7 @@ Approval gate:
    - `.d-spec/planning/changes/<change-id>/design.md` (if present)
    - `.d-spec/planning/changes/<change-id>/specs/**/spec.md`
    - `.d-spec/planning/changes/<change-id>/tasks.md`
-2. Decompose the approved proposal/specs/tasks into a **detailed** Beads epic + tasks per `bd prime` (each task must include a clear description and acceptance criteria; expand beyond `tasks.md` as needed).
+2. Decompose the approved proposal/specs/tasks into a **detailed** Beads epic + tasks per `bd prime` (each task must include a clear description and acceptance criteria; expand beyond `tasks.md` as needed). Encode TDD: tests as Acceptance Criteria, epic Success Criteria, and Red → Green → Refactor tasks with dependencies for non-trivial work.
 3. Add traceability:
    - Add `Beads: <epic-id>` to `.d-spec/planning/changes/<change-id>/proposal.md`
    - Add bidirectional YAML links between the idea doc and change
@@ -177,7 +178,7 @@ Description:
 - What is being built and why.
 
 Acceptance Criteria:
-- Observable outcomes + how to verify.
+- Observable outcomes + how to verify (prefer tests; write failing tests first unless explicitly exempted).
 
 Dependencies:
 - Beads IDs or "none".

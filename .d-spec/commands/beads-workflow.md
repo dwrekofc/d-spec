@@ -18,6 +18,7 @@ Update the issue status to `in_progress`:
 
 ## 3. Work on It
 Implement, test, and document the feature or fix.
+If TDD applies, follow the Red → Green → Refactor loop and keep tests green before closing tasks.
 
 ## 4. Discover New Work
 As you work, you'll often find bugs, TODOs, or related work:
@@ -39,6 +40,7 @@ After closing, check if other work became ready:
 - **Priority levels**: 0=critical, 1=high, 2=medium, 3=low, 4=backlog
 - **Issue types**: bug, feature, task, epic, chore
 - **Dependencies**: Use `blocks` for hard dependencies, `related` for soft links
+- **TDD encoding**: Put tests in Acceptance Criteria, use epic Success Criteria, and create Red → Green → Refactor child tasks with dependencies; label `tdd` or `tests-first` when relevant.
 - **Auto-sync**: Changes automatically export to `.beads/issues.jsonl` (5-second debounce)
 - **Git workflow**: After `git pull`, JSONL auto-imports if newer than DB
 
