@@ -76,3 +76,112 @@ Approval gate:
    - Add bidirectional YAML links between the idea doc and change
 4. Archive the processed idea doc (see `.d-spec/onboarding/archive-instructions.md`) and fill `beads_epic_id` in the YAML header.
 5. Freeze d-spec: do not update `.d-spec/planning/changes/<change-id>/tasks.md` during implementation; all execution tracking happens in Beads.
+
+## Reference: Change-ID Rules
+
+- Format: `<verb>-<slug>-YYYY-MM-DD` (verb-led, kebab-case, date-stamped).
+- Uniqueness: check `.d-spec/planning/changes/` and `.d-spec/planning/archive/` before choosing.
+- Existing non-dated change IDs are grandfathered; new changes must use the date-stamped format.
+
+## Reference: Change Folder Scaffold
+
+Create the following (minimum set):
+
+```
+.d-spec/planning/changes/<change-id>/
+├── proposal.md
+├── tasks.md
+├── specs/
+│   └── <capability>/
+│       └── spec.md
+└── design.md   # only when needed
+```
+
+## Reference: Spec Delta Format + Scenario Rules
+
+- Use delta sections: `## ADDED Requirements`, `## MODIFIED Requirements`, `## REMOVED Requirements`, `## RENAMED Requirements`.
+- Each requirement uses `### Requirement: ...`.
+- **Every requirement must include at least one `#### Scenario:`.**
+- Scenario header must be level-4 (`#### Scenario:`) and include WHEN/THEN steps.
+
+Example:
+
+```markdown
+## ADDED Requirements
+### Requirement: New Feature
+The system SHALL provide ...
+
+#### Scenario: Success case
+- **WHEN** ...
+- **THEN** ...
+```
+
+## Reference: design.md Criteria + Minimal Template
+
+Create `design.md` only when needed (otherwise omit):
+- Cross-cutting change (multiple modules/services) or new architectural pattern
+- New external dependency or significant data model change
+- Security, performance, or migration complexity
+- Ambiguity that benefits from technical decisions before coding
+
+Minimal template:
+
+```markdown
+## Context
+
+## Goals / Non-Goals
+
+## Decisions
+
+## Risks / Trade-offs
+
+## Migration Plan
+
+## Open Questions
+```
+
+## Reference: Validation Checklist + Common Failures
+
+Checklist:
+- Change-id follows `<verb>-<slug>-YYYY-MM-DD` and is unique.
+- `proposal.md`, `tasks.md`, and at least one `specs/<capability>/spec.md` exist.
+- Each requirement has at least one `#### Scenario:`.
+- Scenario headers are `####` (not bullets or `###`).
+- Delta section headers use `ADDED|MODIFIED|REMOVED|RENAMED`.
+- Run `d-spec validate <change-id> --strict` and resolve all errors.
+
+Common failures:
+- Missing scenario per requirement.
+- Wrong scenario header level (`###` or bullet).
+- Using MODIFIED without including the full, updated requirement block.
+- Missing delta section headers or typo in header text.
+
+## Reference: Beads Handoff Prereads + Task Template
+
+Before creating Beads issues, **must read**:
+- `.d-spec/project.md`
+- `.d-spec/planning/changes/<change-id>/proposal.md`
+- `.d-spec/planning/changes/<change-id>/design.md` (if present)
+- `.d-spec/planning/changes/<change-id>/specs/**/spec.md`
+- `.d-spec/planning/changes/<change-id>/tasks.md`
+
+Beads task template (single canonical copy):
+
+```markdown
+Title:
+Type: epic|task|bug|chore
+Priority:
+Status:
+
+Description:
+- What is being built and why.
+
+Acceptance Criteria:
+- Observable outcomes + how to verify.
+
+Dependencies:
+- Beads IDs or "none".
+
+Notes:
+- Risks, rollbacks, or constraints (if any).
+```

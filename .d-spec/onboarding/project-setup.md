@@ -19,6 +19,23 @@ Create (or confirm) the following:
   - `.d-spec/planning/changes/` (change proposals)
   - `.d-spec/planning/archive/` (archived changes)
 
+Canonical layout (diagram):
+
+```
+AGENTS.md
+.d-spec/
+├── AGENTS.md
+├── *master-plan*.md
+├── project.md
+├── standards.md
+├── roadmap.md
+└── planning/
+    ├── ideas/
+    │   └── archive/
+    ├── changes/
+    └── archive/
+```
+
 ## Setup Steps
 
 1. **Create folders**: ensure `.d-spec/planning/ideas/`, `.d-spec/planning/ideas/archive/`, `.d-spec/planning/changes/`, and `.d-spec/planning/archive/` exist.
