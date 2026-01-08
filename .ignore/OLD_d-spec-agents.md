@@ -10,7 +10,7 @@ This folder contains deeper, reusable workflow docs referenced from `AGENTS.md`.
 1. **Discovery (read-only)**: read the north star (`docs/*master-plan*.md`) and skim candidates in `docs/ideas/` (`.d-spec/discovery-to-spec.md`).
 2. **Interview (AskUserTool)**: ask one question at a time, option-based; stop and wait for answers (`.d-spec/discovery-to-spec.md`).
 3. **Draft Spec (d-spec)**: create `d-spec/changes/<change-id>/` (verb-led, date-stamped) and write `proposal.md`, `tasks.md`, and spec deltas (`d-spec/AGENTS.md` Stage 1). Existing non-dated change IDs are grandfathered; new changes must use the date-stamped format.
-4. **Validate**: run `d-spec validate <change-id> --strict`; ensure each new/modified requirement has ≥1 scenario (`d-spec/AGENTS.md`).
+4. **Validate**: ensure each new/modified requirement has ≥1 scenario (`d-spec/AGENTS.md`).
 5. **Approval Gate**: do not create Beads issues or implement until the user approves the proposal in chat.
 
 ### Execution Phase

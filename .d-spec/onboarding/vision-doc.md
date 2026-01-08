@@ -76,6 +76,7 @@ Based on their answers, ask adaptive follow-up questions. Probe on areas that se
 - Save it to the `.d-spec` folder with naming format: `[project/product]-master-plan.md`
 - Review it together and refine
 - Ensure it feels inspiring and directionally clear, not overly prescriptive
+- Include the Idea Overview (~700 words), Scope (in/out bullets), and Early Decisions & Integrations sections
 
 ## Vision Doc Template
 
@@ -95,7 +96,8 @@ Use this template to create the Vision doc markdown file. Save it to the `.d-spe
 
 ## The Vision
 
-[idea overview (~700 words), explain the idea vision, capabilities and benefits in paragraphs]
+### Idea Overview
+[~700 words. Explain the idea vision, capabilities, and benefits in paragraphs.]
 
 ### User Pain Points
 - [Specific pain point 1]
@@ -113,7 +115,14 @@ Use this template to create the Vision doc markdown file. Save it to the `.d-spe
 
 ---
 ## Scope
-[what it will and won't do]
+
+**In Scope**:
+- [What it does]
+- [What it does]
+
+**Out of Scope**:
+- [What it does not do]
+- [What it does not do]
 
 ## Who Is This For?
 
@@ -174,11 +183,25 @@ Use this template to create the Vision doc markdown file. Save it to the `.d-spe
 - [OSS library/tool 2]: [What it does, why it might help]
 - [Competitor/similar product]: [What to learn from it]
 
-### Early Technical Standards/Decisions (if any, subject to change)
-<! populate with instructions>
+---
 
-### Early Architecture Decisions (if any, subject to change)
-<! populate with instructions>
+## Early Decisions & Integrations (Subject to Change)
+
+### Architecture (Early Ideas)
+- [Decision/idea]
+- [Decision/idea]
+
+### Technical Standards
+- [Standard or guideline]
+- [Standard or guideline]
+
+### Dependencies
+- [Library/service]
+- [Library/service]
+
+### Integrations
+- [External system or API]
+- [External system or API]
 
 ---
 ## Roadmap

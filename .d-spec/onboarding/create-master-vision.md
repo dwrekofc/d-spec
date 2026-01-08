@@ -10,28 +10,16 @@ The master plan is the "north star" doc that the agent should read first during 
 
 - Create a master plan early in a new project.
 - Update it when major scope, architecture, or priorities shift.
+- When the team is ready to implement, convert the vision into `.d-spec/project.md` and `.d-spec/roadmap.md` via an interview (vision doc becomes read-only).
 
-## Inputs
+## Vision Creation Guide
 
-- Vision doc workflow: `.d-spec/onboarding/create-vision.md`
-- Standards: `.d-spec/onboarding/create-standards.md`
-- Existing changes (context): `.d-spec/planning/changes/`
+- Use `.d-spec/onboarding/vision-doc.md` as the interview guide and question bank.
+- All interviews and context gathering MUST be facilitated with `AskUserTool`.
+- Ask one question at a time, option-based, and wait for answers.
 
-## Interview (AskUserTool)
+## Where To Save (This Repo)
 
-All interviews and context gathering MUST be facilitated with `AskUserTool`.
-
-Use the interview to pin down:
-- Purpose and non-goals
-- Modules/capabilities (and near-term focus)
-- Constraints (platform, privacy, permissions)
-- North-star priorities for the next 1–3 milestones
-
-## Suggested Outline
-
-Keep the master plan concise and stable:
-- Purpose / goals / non-goals
-- Architecture overview (high level)
-- Constraints (must not violate)
-- Current focus (next milestone)
-- References (links to key specs and standards)
+Save the final vision as one of:
+- `.d-spec/<projectname>-master-vision.md` (single evolving vision), or
+- `.d-spec/planning/ideas/YYYY-MM-DD-vision-<slug>.md` (vision as an intake idea)

@@ -11,7 +11,7 @@ Use this workflow when the repo already contains existing docs, partial specs, o
 ## Sources To Scan (in order)
 
 1. North star: `.d-spec/*master-plan*.md`
-2. Standards: `.d-spec/standards.md` (and any other `.d-spec/*.md` referenced by the master plan)
+2. Project conventions & standards: `.d-spec/project.md` (and any other `.d-spec/*.md` referenced by the master plan)
 3. Intake ideas: `.d-spec/planning/ideas/*.md`
 4. Archived ideas: `.d-spec/planning/ideas/archive/*.md` (for context only; do not resurrect without asking)
 5. d-spec changes in flight: `.d-spec/planning/changes/`
@@ -24,7 +24,7 @@ If any step requires clarification or prioritization, use `AskUserTool` (mandato
 
 For each non-d-spec doc discovered, assign one label:
 - **Idea (untriaged)**: a concept, wishlist, or rough spec → keep in `.d-spec/planning/ideas/`
-- **Decision record**: architectural/standards decision → incorporate into master plan or standards
+- **Decision record**: architectural/conventions decision → incorporate into master plan or project.md
 - **Partial spec**: requirements-like content → likely becomes a d-spec change draft
 - **Historical**: no longer active → archive (or keep archived)
 

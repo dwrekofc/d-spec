@@ -28,3 +28,5 @@ Ask option-based questions about:
 - Roadmap items should usually point to idea docs first.
 - Only after an idea is selected and clarified should it become a d-spec change.
 - Beads issues are created only after the d-spec proposal is approved in chat.
+- New ideas should be added to the roadmap as potential changes.
+- After an idea becomes an approved change, update the roadmap to reference the official spec(s) and Beads epic IDs.

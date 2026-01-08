@@ -12,7 +12,6 @@ $ARGUMENTS
 
 **Steps**
 1. Read the change-id and validation mode from arguments.
-2. Run the validation checklist and/or `d-spec validate`.
 3. Report failures with concrete fixes.
 4. Confirm pass state or ask for approval to fix issues.
 

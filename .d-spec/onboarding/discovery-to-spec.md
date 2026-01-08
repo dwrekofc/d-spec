@@ -11,7 +11,7 @@ Use this workflow when the user asks for a workflow, proposal, spec, plan, or to
 - North star (read first): `.d-spec/*master-plan*.md`
 - Project overview: `.d-spec/project.md`
 - Roadmap: `.d-spec/roadmap.md`
-- Standards: `.d-spec/standards.md`
+- Project conventions & standards: `.d-spec/project.md`
 - Intake ideas: `.d-spec/planning/ideas/*.md`
 - Existing changes: `.d-spec/planning/changes/`
 - Archived changes (context): `.d-spec/planning/archive/`
@@ -27,7 +27,7 @@ Use this workflow when the user asks for a workflow, proposal, spec, plan, or to
 ### 1) Discovery (read-only)
 
 1. Read the master plan doc in `.d-spec/` (first match for `*master-plan*.md`).
-2. Read `.d-spec/project.md`, `.d-spec/roadmap.md`, and `.d-spec/standards.md`.
+2. Read `.d-spec/project.md` and `.d-spec/roadmap.md`.
 3. Enumerate idea docs in `.d-spec/planning/ideas/` and select 3–5 candidate ideas to summarize.
 4. Summarize candidates and ask the user to pick which one to process next.
 
@@ -58,7 +58,7 @@ Target questions:
    - `.d-spec/planning/changes/<change-id>/design.md` when needed
 3. Ensure each new/modified requirement includes at least one scenario.
 4. Encode TDD expectations in `tasks.md`: acceptance criteria should be tests, and for larger work split Red → Green → Refactor into ordered tasks or dependencies.
-5. Run: `d-spec validate <change-id> --strict` and fix issues.
+
 
 Approval gate:
 - Do not generate Beads issues or start implementation until the user approves the proposal in chat.
@@ -75,8 +75,9 @@ Approval gate:
 3. Add traceability:
    - Add `Beads: <epic-id>` to `.d-spec/planning/changes/<change-id>/proposal.md`
    - Add bidirectional YAML links between the idea doc and change
-4. Archive the processed idea doc (see `.d-spec/onboarding/archive-instructions.md`) and fill `beads_epic_id` in the YAML header.
-5. Freeze d-spec: do not update `.d-spec/planning/changes/<change-id>/tasks.md` during implementation; all execution tracking happens in Beads.
+4. After the Beads epic exists, update the roadmap to reference the official spec(s) and Beads epic IDs for the approved change.
+5. Archive the processed idea doc (see `.d-spec/onboarding/archive-instructions.md`) and fill `beads_epic_id` in the YAML header.
+6. Freeze d-spec: do not update `.d-spec/planning/changes/<change-id>/tasks.md` during implementation; all execution tracking happens in Beads.
 
 ## Reference: Change-ID Rules
 
@@ -149,7 +150,7 @@ Checklist:
 - Each requirement has at least one `#### Scenario:`.
 - Scenario headers are `####` (not bullets or `###`).
 - Delta section headers use `ADDED|MODIFIED|REMOVED|RENAMED`.
-- Run `d-spec validate <change-id> --strict` and resolve all errors.
+
 
 Common failures:
 - Missing scenario per requirement.

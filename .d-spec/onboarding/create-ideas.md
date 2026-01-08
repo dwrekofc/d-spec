@@ -50,7 +50,7 @@ Use headings if helpful, but keep it lightweight:
 
 ## Next Step (Required)
 
-- Add the idea as an unimplemented/future item in `.d-spec/*master-plan*.md` and/or `.d-spec/roadmap.md`.
+- Add the idea as an unimplemented/future item in `.d-spec/*master-plan*.md` and `.d-spec/roadmap.md` (as a potential change).
 
 ## Notes
 
