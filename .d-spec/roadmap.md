@@ -1,13 +1,13 @@
 # SwiftEA Roadmap
 
-This roadmap summarizes planned work based on `docs/swiftea-architecture-master-plan.md`, current OpenSpec specs (`openspec/specs/`), and proposed OpenSpec changes (`openspec/changes/`).
+This roadmap summarizes planned work based on `.d-spec/swiftea-architecture-master-plan.md` and proposed d-spec changes (`.d-spec/planning/changes/`).
 
 ## Now (Bootstrapping)
 
 1. Create the master app folder structure
-   - Create the modular monolith layout described in `docs/swiftea-architecture-master-plan.md` (Core, Modules, CLI, Tests).
+   - Create the modular monolith layout described in `.d-spec/swiftea-architecture-master-plan.md` (Core, Modules, CLI, Tests).
    - Ensure Swift Package Manager builds a CLI binary (`swiftea`) and internal modules compile behind clear boundaries.
-   - Idea: `docs/ideas/2026-01-08-create-master-app-folder-structure.md`
+   - Idea: `.d-spec/planning/ideas/2026-01-08-create-master-app-folder-structure.md`
 
 ## Phase 1 — Foundation (Mail + Core)
 
@@ -15,7 +15,7 @@ This roadmap summarizes planned work based on `docs/swiftea-architecture-master-
 
 ### Vault Bootstrap
 - `swiftea init --vault <path>` creates vault-local config + folder layout and binds accounts per-vault (vault-scoped model).
-- Idea: `docs/ideas/2026-01-08-add-vault-scoped-account-binding.md`
+- Idea: `.d-spec/planning/ideas/2026-01-08-add-vault-scoped-account-binding.md`
 
 ### Core (Shared Infrastructure)
 - Database layer (libSQL/SQLite), baseline schema, migrations
@@ -28,12 +28,12 @@ This roadmap summarizes planned work based on `docs/swiftea-architecture-master-
 
 ### Mail Module (Capabilities)
 - Read/search/export/watch foundation
-  - OpenSpec change: `openspec/changes/add-mail-read-export/proposal.md`
-  - Capability spec (truth): `openspec/specs/mail/spec.md`
+  - d-spec change: `.d-spec/planning/changes/add-mail-read-export/proposal.md`
+  - Spec delta: `.d-spec/planning/changes/add-mail-read-export/specs/mail/spec.md`
 - Threading support
-  - OpenSpec change: `openspec/changes/add-threading/proposal.md`
+  - d-spec change: `.d-spec/planning/changes/add-threading/proposal.md`
 - Apple Mail actions via AppleScript
-  - OpenSpec change: `openspec/changes/add-mail-actions-applescript/proposal.md`
+  - d-spec change: `.d-spec/planning/changes/add-mail-actions-applescript/proposal.md`
 
 ### Deliverable checkpoints
 - `swiftea mail sync` builds and incrementally updates a local mirror
@@ -75,7 +75,7 @@ This roadmap summarizes planned work based on `docs/swiftea-architecture-master-
 
 ## Proposed Changes (Parked / Future Candidates)
 
-These are proposal candidates extracted from the master plan for later OpenSpec work:
+These are proposal candidates extracted from the master plan for later d-spec work:
 
 - `add-calendar-module-foundation`
 - `add-contacts-module-foundation`

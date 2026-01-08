@@ -4,7 +4,7 @@ area: core
 status: draft
 created: 2026-01-08
 processed_date: 2026-01-08
-openspec_change_id: add-master-folder-structure-2026-01-08
+d-spec_change_id: add-master-folder-structure-2026-01-08
 beads_epic_id: swiftea-btu
 decision_summary:
   - Single library target `SwiftEAKit` with CLI in `SwiftEACLI`

@@ -4,7 +4,7 @@ Use this when the user wants to establish or refine project standards (coding st
 
 ## Primary Standard Doc
 
-- Keep standards in `docs/standards.md` (or a small set of `docs/*.md` files) so discovery can load them quickly.
+- Keep standards in `.d-spec/standards.md` (or a small set of `.d-spec/*.md` files) so discovery can load them quickly.
 
 ## Interview (AskUserTool)
 

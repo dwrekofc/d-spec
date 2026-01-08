@@ -1,0 +1,2 @@
+beads: https://github.com/steveyegge/beads
+- installing beads: https://github.com/steveyegge/beads/blob/main/docs/INSTALLING.md

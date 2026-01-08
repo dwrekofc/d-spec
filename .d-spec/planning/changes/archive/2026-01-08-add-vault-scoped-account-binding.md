@@ -4,7 +4,7 @@ area: core
 status: draft
 created: 2026-01-08
 processed_date: 2026-01-08
-openspec_change_id: add-vault-scoped-account-binding-2026-01-08
+d-spec_change_id: add-vault-scoped-account-binding-2026-01-08
 beads_epic_id: swiftea-294
 decision_summary:
   - Vault config in <vault>/.swiftea/ with vault-local DB

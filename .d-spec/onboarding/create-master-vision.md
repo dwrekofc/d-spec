@@ -4,7 +4,7 @@ The master plan is the "north star" doc that the agent should read first during 
 
 ## Location Rule
 
-- The agent should look for the first match of: `docs/*master-plan*.md`
+- The agent should look for the first match of: `.d-spec/*master-plan*.md`
 
 ## When To Create/Update
 
@@ -13,9 +13,9 @@ The master plan is the "north star" doc that the agent should read first during 
 
 ## Inputs
 
-- Vision doc workflow: `.d-spec/create-vision.md`
-- Standards: `.d-spec/create-standards.md`
-- Existing OpenSpec truth: `openspec/specs/`
+- Vision doc workflow: `.d-spec/onboarding/create-vision.md`
+- Standards: `.d-spec/onboarding/create-standards.md`
+- Existing changes (context): `.d-spec/planning/changes/`
 
 ## Interview (AskUserTool)
 

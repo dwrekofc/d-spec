@@ -1,15 +1,15 @@
-# OpenSpec Instructions
+# d-spec Instructions
 
-Instructions for AI coding assistants using OpenSpec for spec-driven development.
+Instructions for AI coding assistants using d-spec for spec-driven development.
 
 ## TL;DR Quick Checklist
 
-- Search existing work: `openspec spec list --long`, `openspec list` (use `rg` only for full-text search)
+- Search existing work: `d-spec spec list --long`, `d-spec list` (use `rg` only for full-text search)
 - Decide scope: new capability vs modify existing capability
 - Pick a unique `change-id`: kebab-case, verb-led, date-stamped (`add-`, `update-`, `remove-`, `refactor-`), format `<verb>-<slug>-YYYY-MM-DD`. Existing non-dated change IDs are grandfathered; new changes must use the date-stamped format.
 - Scaffold: `proposal.md`, `tasks.md`, `design.md` (only if needed), and delta specs per affected capability
 - Write deltas: use `## ADDED|MODIFIED|REMOVED|RENAMED Requirements`; include at least one `#### Scenario:` per requirement
-- Validate: `openspec validate [change-id] --strict` and fix issues
+- Validate: `d-spec validate [change-id] --strict` and fix issues
 - Request approval: Do not start implementation until proposal is approved
 
 ## Three-Stage Workflow
@@ -41,110 +41,69 @@ Skip proposal for:
 - Tests for existing behavior
 
 **Workflow**
-1. Review `openspec/project.md`, `openspec list`, and `openspec list --specs` to understand current context.
-2. Choose a unique verb-led, date-stamped `change-id` and scaffold `proposal.md`, `tasks.md`, optional `design.md`, and spec deltas under `openspec/changes/<id>/`.
+1. Review `.d-spec/project.md` and `.d-spec/planning/changes/` to understand current context.
+2. Choose a unique verb-led, date-stamped `change-id` and scaffold `proposal.md`, `tasks.md`, optional `design.md`, and spec deltas under `.d-spec/planning/changes/<id>/`.
 3. Draft spec deltas using `## ADDED|MODIFIED|REMOVED Requirements` with at least one `#### Scenario:` per requirement.
-4. Run `openspec validate <id> --strict` and resolve any issues before sharing the proposal.
+
+**Before Creating Specs:**
+- Always check if a similar change already exists in `.d-spec/planning/changes/` or `.d-spec/planning/archive/`
+- Prefer modifying an existing change (or creating a follow-on change) over duplicating requirements
+- If the request is ambiguous, ask clarifying questions before scaffolding
+
 
 ### Stage 2: Create Beads Epics and Tasks
 Track these steps as TODOs and complete them one by one.
 1. **Read proposal.md** - Understand what's being built
 2. **Read design.md** (if exists) - Review technical decisions
 3. **Read tasks.md** - Get implementation checklist
-4. **Convert to Epics and Tasks in Beads** - Create an epic and tasks from the approved proposal; each task must include type, priority, status, description, explicit dependencies (beads IDs or "none"), acceptance criteria (observable outcomes + verification), and notes as needed (use the template in `CLAUDE.md`)
-5. **Definition of "correct and complete" Beads task** - Every task has full metadata, description, acceptance criteria, dependencies, and notes where needed
-6. **Have we met that standard?** - If not, fix before execution:
-   - Backfill every task with Description + Acceptance Criteria using the template in `CLAUDE.md`
+4. **Read relevant specs** in `.d-spec/planning/changes/<change-id>/specs/[capability]/spec.md`
+5. Read `.d-spec/project.md` for conventions
+6. **Review for conflicts** and clarify with user
+7. **Convert to Epics and Tasks in Beads** - Create an epic and tasks from the approved proposal; each task must include type, priority, status, description, explicit dependencies (beads IDs or "none"), acceptance criteria (observable outcomes + verification), and notes as needed (use the template in `AGENTS.md`)
+8. **Definition of "correct and complete" Beads task** - Every task has full metadata, description, acceptance criteria, dependencies, and notes where needed
+9. **Have we met that standard?** - If not, fix before execution:
+   - Backfill every task with Description + Acceptance Criteria using the template in `AGENTS.md`
    - Add real dependencies between tasks (not just the epic) where sequencing matters
-7. **Execution gate** - Do not start implementation until the proposal is approved and Beads tasks meet the standard above
+10. **Execution gate** - Do not start implementation until the proposal is approved and Beads tasks meet the standard above
 
-### Stage 3: Archiving OpenSpec Changes
+### Stage 3: Archiving d-spec Changes
 After successfully executing Beads epics/tasks (and any required deployment), create a separate PR to:
 - Confirm all Beads tasks are closed and acceptance criteria verified, then run `bd sync`
-- Move `changes/[name]/` → `changes/archive/YYYY-MM-DD-[name]/`
-- Update `specs/` if capabilities changed
-- Use `openspec archive <change-id> --skip-specs --yes` for tooling-only changes (always pass the change ID explicitly)
-- Run `openspec validate --strict` to confirm the archived change passes checks
-Note: This is separate from archiving idea docs in `docs/archive/`, which happens after proposal approval.
+- Move `.d-spec/planning/changes/[name]/` → `.d-spec/planning/archive/YYYY-MM-DD-[name]/`
+- Confirm archived change specs under `.d-spec/planning/archive/` are correct
+- Use `d-spec archive <change-id> --skip-specs --yes` for tooling-only changes (always pass the change ID explicitly)
+- Run `d-spec validate --strict` to confirm the archived change passes checks
+Note: This is separate from archiving idea docs in `.d-spec/planning/ideas/archive/`, which happens after proposal approval.
 
-## Before Any Task
 
-**Context Checklist:**
-- [ ] Read relevant specs in `specs/[capability]/spec.md`
-- [ ] Check pending changes in `changes/` for conflicts
-- [ ] Read `openspec/project.md` for conventions
-- [ ] Run `openspec list` to see active changes
-- [ ] Run `openspec list --specs` to see existing capabilities
-
-**Before Creating Specs:**
-- Always check if capability already exists
-- Prefer modifying existing specs over creating duplicates
-- Use `openspec show [spec]` to review current state
-- If request is ambiguous, ask 1–2 clarifying questions before scaffolding
 
 ### Search Guidance
-- Enumerate specs: `openspec spec list --long` (or `--json` for scripts)
-- Enumerate changes: `openspec list` (or `openspec change list --json` - deprecated but available)
+- Enumerate changes: `d-spec list`
 - Show details:
-  - Spec: `openspec show <spec-id> --type spec` (use `--json` for filters)
-  - Change: `openspec show <change-id> --json --deltas-only`
-- Full-text search (use ripgrep): `rg -n "Requirement:|Scenario:" openspec/specs`
+  - Change: `d-spec show <change-id> --json --deltas-only`
+- Full-text search (use ripgrep): `rg -n "Requirement:|Scenario:" .d-spec/planning/changes .d-spec/planning/archive`
 
-## Quick Start
-
-### CLI Commands
-
-```bash
-# Essential commands
-openspec list                  # List active changes
-openspec list --specs          # List specifications
-openspec show [item]           # Display change or spec
-openspec validate [item]       # Validate changes or specs
-openspec archive <change-id> [--yes|-y]   # Archive after deployment (add --yes for non-interactive runs)
-
-# Project management
-openspec init [path]           # Initialize OpenSpec
-openspec update [path]         # Update instruction files
-
-# Interactive mode
-openspec show                  # Prompts for selection
-openspec validate              # Bulk validation mode
-
-# Debugging
-openspec show [change] --json --deltas-only
-openspec validate [change] --strict
-```
-
-### Command Flags
-
-- `--json` - Machine-readable output
-- `--type change|spec` - Disambiguate items
-- `--strict` - Comprehensive validation
-- `--no-interactive` - Disable prompts
-- `--skip-specs` - Archive without spec updates
-- `--yes`/`-y` - Skip confirmation prompts (non-interactive archive)
 
 ## Directory Structure
 
 ```
-openspec/
-├── project.md              # Project conventions
-├── specs/                  # Current truth - what IS built
-│   └── [capability]/       # Single focused capability
-│       ├── spec.md         # Requirements and scenarios
-│       └── design.md       # Technical patterns
-├── changes/                # Proposals - what SHOULD change
-│   ├── [change-name]/
-│   │   ├── proposal.md     # Why, what, impact
-│   │   ├── tasks.md        # Implementation checklist
-│   │   ├── design.md       # Technical decisions (optional; see criteria)
-│   │   └── specs/          # Delta changes
-│   │       └── [capability]/
-│   │           └── spec.md # ADDED/MODIFIED/REMOVED
-│   └── archive/            # Completed changes
+.d-spec/
+├── project.md
+├── standards.md
+├── roadmap.md
+├── *master-plan*.md
+├── planning/
+│   ├── ideas/
+│   │   └── archive/
+│   ├── changes/
+│   │   └── [change-id]/
+│   │       ├── proposal.md
+│   │       ├── tasks.md
+│   │       ├── design.md
+│   │       └── specs/
+│   │           └── [capability]/spec.md
+│   └── archive/
 ```
-
-## Creating Change Proposals
 
 ### Decision Tree
 
@@ -160,7 +119,7 @@ New request?
 
 ### Proposal Structure
 
-1. **Create directory:** `changes/[change-id]/` (kebab-case, verb-led, date-stamped, unique)
+1. **Create directory:** `.d-spec/planning/changes/[change-id]/` (kebab-case, verb-led, date-stamped, unique)
 
 2. **Write proposal.md:**
 ```markdown
@@ -178,7 +137,7 @@ New request?
 - Affected code: [key files/systems]
 ```
 
-3. **Create spec deltas:** `specs/[capability]/spec.md`
+3. **Create spec deltas:** `.d-spec/planning/changes/[change-id]/specs/[capability]/spec.md`
 ```markdown
 ## ADDED Requirements
 ### Requirement: New Feature
@@ -197,7 +156,7 @@ The system SHALL provide...
 **Reason**: [Why removing]
 **Migration**: [How to handle]
 ```
-If multiple capabilities are affected, create multiple delta files under `changes/[change-id]/specs/<capability>/spec.md`—one per capability.
+If multiple capabilities are affected, create multiple delta files under `.d-spec/planning/changes/[change-id]/specs/<capability>/spec.md`—one per capability.
 
 4. **Create tasks.md:**
 ```markdown
@@ -278,7 +237,7 @@ Headers matched with `trim(header)` - whitespace ignored.
 Common pitfall: Using MODIFIED to add a new concern without including the previous text. This causes loss of detail at archive time. If you aren’t explicitly changing the existing requirement, add a new requirement under ADDED instead.
 
 Authoring a MODIFIED requirement correctly:
-1) Locate the existing requirement in `openspec/specs/<capability>/spec.md`.
+1) Locate the existing requirement in `.d-spec/planning/changes/<change-id>/specs/<capability>/spec.md` or `.d-spec/planning/archive/` for prior approved changes.
 2) Copy the entire requirement block (from `### Requirement: ...` through its scenarios).
 3) Paste it under `## MODIFIED Requirements` and edit to reflect the new behavior.
 4) Ensure the header text matches exactly (whitespace-insensitive) and keep at least one `#### Scenario:`.
@@ -295,7 +254,7 @@ Example for RENAMED:
 ### Common Errors
 
 **"Change must have at least one delta"**
-- Check `changes/[name]/specs/` exists with .md files
+- Check `.d-spec/planning/changes/[name]/specs/` exists with .md files
 - Verify files have operation prefixes (## ADDED Requirements)
 
 **"Requirement must have at least one scenario"**
@@ -304,39 +263,37 @@ Example for RENAMED:
 
 **Silent scenario parsing failures**
 - Exact format required: `#### Scenario: Name`
-- Debug with: `openspec show [change] --json --deltas-only`
+- Debug with: `d-spec show [change] --json --deltas-only`
 
 ### Validation Tips
 
 ```bash
 # Always use strict mode for comprehensive checks
-openspec validate [change] --strict
+d-spec validate [change] --strict
 
 # Debug delta parsing
-openspec show [change] --json | jq '.deltas'
+d-spec show [change] --json | jq '.deltas'
 
 # Check specific requirement
-openspec show [spec] --json -r 1
+# d-spec show [spec] --json -r 1
 ```
 
 ## Happy Path Script
 
 ```bash
 # 1) Explore current state
-openspec spec list --long
-openspec list
+d-spec list
 # Optional full-text search:
-# rg -n "Requirement:|Scenario:" openspec/specs
-# rg -n "^#|Requirement:" openspec/changes
+# rg -n "Requirement:|Scenario:" .d-spec/planning/changes .d-spec/planning/archive
 
 # 2) Choose change id and scaffold
 CHANGE=add-two-factor-auth
-mkdir -p openspec/changes/$CHANGE/{specs/auth}
-printf "## Why\n...\n\n## What Changes\n- ...\n\n## Impact\n- ...\n" > openspec/changes/$CHANGE/proposal.md
-printf "## 1. Implementation\n- [ ] 1.1 ...\n" > openspec/changes/$CHANGE/tasks.md
+mkdir -p .d-spec/planning/changes/$CHANGE/{specs/auth}
+printf "## Why\n...\n\n## What Changes\n- ...\n\n## Impact\n- ...\n" > .d-spec/planning/changes/$CHANGE/proposal.md
+printf "## 1. Implementation\n- [ ] 1.1 ...\n" > .d-spec/planning/changes/$CHANGE/tasks.md
 
 # 3) Add deltas (example)
-cat > openspec/changes/$CHANGE/specs/auth/spec.md << 'EOF'
+cat > .d-spec/planning/changes/$CHANGE/specs/auth/spec.md << 'EOF'
 ## ADDED Requirements
 ### Requirement: Two-Factor Authentication
 Users MUST provide a second factor during login.
@@ -347,13 +304,13 @@ Users MUST provide a second factor during login.
 EOF
 
 # 4) Validate
-openspec validate $CHANGE --strict
+d-spec validate $CHANGE --strict
 ```
 
 ## Multi-Capability Example
 
 ```
-openspec/changes/add-2fa-notify/
+.d-spec/planning/changes/add-2fa-notify/
 ├── proposal.md
 ├── tasks.md
 └── specs/
@@ -393,7 +350,7 @@ Only add complexity with:
 
 ### Clear References
 - Use `file.ts:42` format for code locations
-- Reference specs as `specs/auth/spec.md`
+- Reference specs as `.d-spec/planning/changes/<change-id>/specs/auth/spec.md`
 - Link related changes and PRs
 
 ### Capability Naming
@@ -419,8 +376,8 @@ Only add complexity with:
 ## Error Recovery
 
 ### Change Conflicts
-1. Run `openspec list` to see active changes
-2. Check for overlapping specs
+1. Run `d-spec list` to see active changes
+2. Check for overlapping changes in `.d-spec/planning/changes/` and `.d-spec/planning/archive/`
 3. Coordinate with change owners
 4. Consider combining proposals
 
@@ -431,17 +388,16 @@ Only add complexity with:
 4. Ensure scenarios properly formatted
 
 ### Missing Context
-1. Read project.md first
-2. Check related specs
-3. Review recent archives
+1. Read `.d-spec/project.md` first
+2. Check related change specs under `.d-spec/planning/changes/`
+3. Review recent archives under `.d-spec/planning/archive/`
 4. Ask for clarification
 
 ## Quick Reference
 
 ### Stage Indicators
-- `changes/` - Proposed, not yet built
-- `specs/` - Built and deployed
-- `archive/` - Completed changes
+- `.d-spec/planning/changes/` - Proposed, not yet built
+- `.d-spec/planning/archive/` - Completed changes
 
 ### File Purposes
 - `proposal.md` - Why and what
@@ -451,10 +407,10 @@ Only add complexity with:
 
 ### CLI Essentials
 ```bash
-openspec list              # What's in progress?
-openspec show [item]       # View details
-openspec validate --strict # Is it correct?
-openspec archive <change-id> [--yes|-y]  # Mark complete (add --yes for automation)
+d-spec list              # What's in progress?
+d-spec show [item]       # View details
+d-spec validate --strict # Is it correct?
+d-spec archive <change-id> [--yes|-y]  # Mark complete (add --yes for automation)
 ```
 
 Remember: Specs are truth. Changes are proposals. Keep them in sync.

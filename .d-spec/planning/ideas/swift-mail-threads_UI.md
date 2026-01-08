@@ -246,7 +246,7 @@ Reply content...
 
 ## Next Steps
 
-1. Create OpenSpec change proposal for conversation threading
+1. Create d-spec change proposal for conversation threading
 2. Implement Phase 1 (database schema + CLI commands)
 3. Test with sample email dataset
 4. Gather feedback on thread detection accuracy

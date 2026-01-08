@@ -10,7 +10,7 @@ SwiftEA needs a stable SwiftPM layout that reflects the modular monolith (Core +
 - Create a `Tests/TestData` folder for future fixtures.
 
 ## Impact
-- Affected specs: `specs/project-structure/spec.md` (new capability)
+- Affected specs: `.d-spec/planning/changes/add-master-folder-structure-2026-01-08/specs/project-structure/spec.md` (new capability)
 - Affected code: `Package.swift`, `Sources/SwiftEAKit/**`, `Sources/SwiftEACLI/**`, `Tests/TestData/`
 
 Beads: swiftea-btu
