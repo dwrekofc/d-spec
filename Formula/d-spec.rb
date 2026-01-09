@@ -5,7 +5,7 @@ class DSpec < Formula
   desc "Planning/ideation workflow template for AI-assisted development"
   homepage "https://github.com/dwrekofc/d-spec"
   url "https://github.com/dwrekofc/d-spec/archive/refs/tags/v0.2.1.tar.gz"
-  sha256 "d7eb339bf394eaf6ce6c47edcb22978cb99db82163de7b858e327aaf14f43d98"
+  sha256 "45758bc348e0869c6686745e888149b1deccf53c39645188b3b8377bd68ff8cf"
   license "MIT"
   head "https://github.com/dwrekofc/d-spec.git", branch: "main"
 
