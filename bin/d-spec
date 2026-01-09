@@ -291,7 +291,7 @@ cmd_init() {
     # Step 5: Run bd doctor --fix to set up git hooks and fix common issues
     echo ""
     print_info "Running bd doctor --fix..."
-    bd doctor --fix
+    bd doctor --fix --yes
 
     echo ""
     print_success "d-spec initialized successfully!"
