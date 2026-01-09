@@ -6,7 +6,7 @@
 
 set -euo pipefail
 
-VERSION="0.2.0"
+VERSION="0.2.1"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 # After brew install, templates live in $(brew --prefix)/share/d-spec/templates
@@ -101,8 +101,9 @@ check_beads_installed() {
 }
 
 check_git_repo() {
-    if ! git rev-parse --is-inside-work-tree &> /dev/null; then
-        print_info "Not a git repository, initializing..."
+    # Check if .git exists in current directory (not just any parent)
+    if [[ ! -d ".git" ]]; then
+        print_info "Initializing git repository..."
         git init -b main
         print_success "Git repository initialized"
     fi
@@ -143,9 +144,9 @@ commit_and_publish() {
     # Check if gh CLI is available and authenticated
     check_gh_cli || return 1
 
-    # Stage all files
+    # Stage all files in current directory only
     print_info "Staging files..."
-    git add -A
+    git add .
 
     # Check if there are changes to commit
     if git diff --cached --quiet; then
