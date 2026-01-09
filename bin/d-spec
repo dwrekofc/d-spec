@@ -214,6 +214,11 @@ cmd_init() {
     # Step 3: Copy d-spec templates (will overwrite beads AGENTS.md)
     copy_templates "${project_dir}" "$force" || exit 1
 
+    # Step 4: Run bd doctor --fix to set up git hooks and fix common issues
+    echo ""
+    print_info "Running bd doctor --fix..."
+    bd doctor --fix
+
     echo ""
     print_success "d-spec initialized successfully!"
     echo ""
