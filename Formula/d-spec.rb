@@ -18,6 +18,7 @@ class DSpec < Formula
     (share/"d-spec/templates").install Dir["templates/*"]
     (share/"d-spec/templates").install "templates/.d-spec"
     (share/"d-spec/templates").install "templates/.gitattributes"
+    (share/"d-spec/templates").install "templates/.ai"
   end
 
   def caveats

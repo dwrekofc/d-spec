@@ -6,7 +6,7 @@
 
 set -euo pipefail
 
-VERSION="0.2.1"
+VERSION="0.2.2"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 # After brew install, templates live in $(brew --prefix)/share/d-spec/templates
@@ -250,6 +250,22 @@ copy_templates() {
         touch "${dest}/.d-spec/${dir}/.gitkeep"
     done
     print_success "Created planning directory structure"
+
+    # Create .ai/refs directory for AI reference materials
+    mkdir -p "${dest}/.ai/refs"
+    touch "${dest}/.ai/refs/.gitkeep"
+    print_success "Created .ai/refs/ for AI reference materials"
+
+    # Add .ai/ to .gitignore (gitignored by default)
+    if [[ -f "${dest}/.gitignore" ]]; then
+        if ! grep -q "^\.ai/" "${dest}/.gitignore" 2>/dev/null; then
+            echo ".ai/" >> "${dest}/.gitignore"
+            print_success "Added .ai/ to .gitignore"
+        fi
+    else
+        echo ".ai/" > "${dest}/.gitignore"
+        print_success "Created .gitignore with .ai/"
+    fi
 }
 
 cmd_init() {
