@@ -155,6 +155,10 @@ copy_templates() {
         print_warning "CLAUDE.md already exists, skipping"
     fi
 
+    # Overwrite AGENTS.md (beads creates one, d-spec version is more complete)
+    cp "${TEMPLATE_DIR}/AGENTS.md" "${dest}/"
+    print_success "Copied AGENTS.md (overwrites beads version)"
+
     # .gitattributes - merge with existing if present
     if [[ -f "${dest}/.gitattributes" ]]; then
         if ! grep -q "beads" "${dest}/.gitattributes" 2>/dev/null; then
