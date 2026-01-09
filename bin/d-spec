@@ -1,0 +1,331 @@
+#!/usr/bin/env bash
+#
+# d-spec - Planning/ideation workflow template installer
+# Integrates with Beads (bd) for issue tracking
+#
+
+set -euo pipefail
+
+VERSION="0.1.0"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+# After brew install, templates live in $(brew --prefix)/share/d-spec/templates
+# During development, they're relative to script
+if [[ -d "$(brew --prefix 2>/dev/null)/share/d-spec/templates" ]]; then
+    TEMPLATE_DIR="$(brew --prefix)/share/d-spec/templates"
+elif [[ -d "${SCRIPT_DIR}/../templates" ]]; then
+    TEMPLATE_DIR="${SCRIPT_DIR}/../templates"
+else
+    echo "Error: Cannot locate d-spec templates" >&2
+    exit 1
+fi
+
+# Colors for output
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+NC='\033[0m' # No Color
+
+print_error() {
+    echo -e "${RED}Error:${NC} $1" >&2
+}
+
+print_success() {
+    echo -e "${GREEN}✓${NC} $1"
+}
+
+print_warning() {
+    echo -e "${YELLOW}Warning:${NC} $1"
+}
+
+print_info() {
+    echo -e "${BLUE}→${NC} $1"
+}
+
+usage() {
+    cat <<EOF
+d-spec - Planning/ideation workflow template for AI-assisted development
+
+Usage:
+    d-spec init [--force]       Initialize d-spec in current project
+    d-spec update               Update templates to latest version
+    d-spec version              Show version information
+    d-spec help                 Show this help message
+
+Commands:
+    init        Initialize d-spec workflow in the current directory.
+                Requires beads (bd) to be installed. Will run 'bd init'
+                first if .beads/ doesn't exist.
+
+                Options:
+                    --force     Overwrite existing .d-spec/ folder
+
+    update      Update template files to the latest installed version.
+                Preserves user-modified files (project.md, roadmap.md,
+                master-plan files, and planning/ contents).
+
+    version     Display d-spec version and template location.
+
+    help        Show this help message.
+
+Examples:
+    # Initialize in a new project
+    cd my-project
+    d-spec init
+
+    # Force reinitialize (overwrites .d-spec/)
+    d-spec init --force
+
+Requirements:
+    - beads (bd): brew tap steveyegge/beads && brew install bd
+    - git repository (for beads integration)
+
+For more information, see: https://github.com/dwrekofc/d-spec
+EOF
+}
+
+check_beads_installed() {
+    if ! command -v bd &> /dev/null; then
+        print_error "beads (bd) is not installed."
+        echo ""
+        echo "Install beads first with:"
+        echo "    brew tap steveyegge/beads"
+        echo "    brew install bd"
+        echo ""
+        echo "For more information:"
+        echo "    https://github.com/steveyegge/beads"
+        return 1
+    fi
+    return 0
+}
+
+check_git_repo() {
+    if ! git rev-parse --is-inside-work-tree &> /dev/null; then
+        print_error "Not inside a git repository."
+        echo "Initialize git first with: git init"
+        return 1
+    fi
+    return 0
+}
+
+init_beads() {
+    local project_dir="$1"
+
+    if [[ -d "${project_dir}/.beads" ]]; then
+        print_info "Beads already initialized, skipping bd init"
+        return 0
+    fi
+
+    print_info "Initializing beads..."
+    if bd init; then
+        print_success "Beads initialized"
+    else
+        print_error "Failed to initialize beads"
+        return 1
+    fi
+}
+
+copy_templates() {
+    local dest="$1"
+    local force="${2:-false}"
+
+    # Check if .d-spec already exists
+    if [[ -d "${dest}/.d-spec" ]] && [[ "$force" != "true" ]]; then
+        print_error ".d-spec/ already exists. Use --force to overwrite."
+        return 1
+    fi
+
+    if [[ "$force" == "true" ]] && [[ -d "${dest}/.d-spec" ]]; then
+        print_warning "Removing existing .d-spec/ folder"
+        rm -rf "${dest}/.d-spec"
+    fi
+
+    print_info "Copying d-spec templates..."
+
+    # Copy .d-spec folder
+    cp -R "${TEMPLATE_DIR}/.d-spec" "${dest}/"
+    print_success "Copied .d-spec/ folder"
+
+    # Copy root-level CLAUDE.md if it doesn't exist
+    if [[ ! -f "${dest}/CLAUDE.md" ]]; then
+        cp "${TEMPLATE_DIR}/CLAUDE.md" "${dest}/"
+        print_success "Copied CLAUDE.md"
+    else
+        print_warning "CLAUDE.md already exists, skipping"
+    fi
+
+    # .gitattributes - merge with existing if present
+    if [[ -f "${dest}/.gitattributes" ]]; then
+        if ! grep -q "beads" "${dest}/.gitattributes" 2>/dev/null; then
+            cat "${TEMPLATE_DIR}/.gitattributes" >> "${dest}/.gitattributes"
+            print_success "Appended beads merge strategy to .gitattributes"
+        else
+            print_info ".gitattributes already has beads config"
+        fi
+    else
+        cp "${TEMPLATE_DIR}/.gitattributes" "${dest}/"
+        print_success "Copied .gitattributes"
+    fi
+
+    # Create empty planning directories with .gitkeep
+    for dir in planning/changes planning/ideas planning/ideas/archive planning/specs planning/archive; do
+        mkdir -p "${dest}/.d-spec/${dir}"
+        touch "${dest}/.d-spec/${dir}/.gitkeep"
+    done
+    print_success "Created planning directory structure"
+}
+
+cmd_init() {
+    local force=false
+
+    # Parse arguments
+    while [[ $# -gt 0 ]]; do
+        case "$1" in
+            --force|-f)
+                force=true
+                shift
+                ;;
+            *)
+                print_error "Unknown option: $1"
+                usage
+                exit 1
+                ;;
+        esac
+    done
+
+    local project_dir
+    project_dir="$(pwd)"
+
+    echo "Initializing d-spec in: ${project_dir}"
+    echo ""
+
+    # Step 1: Check prerequisites
+    check_git_repo || exit 1
+    check_beads_installed || exit 1
+
+    # Step 2: Initialize beads first (creates .beads/ and its AGENTS.md)
+    init_beads "${project_dir}" || exit 1
+
+    # Step 3: Copy d-spec templates (will overwrite beads AGENTS.md)
+    copy_templates "${project_dir}" "$force" || exit 1
+
+    echo ""
+    print_success "d-spec initialized successfully!"
+    echo ""
+    echo "Next steps:"
+    echo "  1. Create your master plan: .d-spec/<project>-master-plan.md"
+    echo "  2. Define project conventions: .d-spec/project.md"
+    echo "  3. Set up your roadmap: .d-spec/roadmap.md"
+    echo ""
+    echo "For workflow guidance, see:"
+    echo "  - .d-spec/AGENTS.md (main workflow)"
+    echo "  - .d-spec/onboarding/project-setup.md (setup guide)"
+    echo ""
+    echo "Beads commands:"
+    echo "  bd ready              # Find available work"
+    echo "  bd create             # Create a new issue"
+    echo "  bd workflow           # View issue workflow guide"
+}
+
+cmd_update() {
+    local project_dir
+    project_dir="$(pwd)"
+
+    if [[ ! -d "${project_dir}/.d-spec" ]]; then
+        print_error "No .d-spec/ found. Run 'd-spec init' first."
+        exit 1
+    fi
+
+    print_info "Updating d-spec templates..."
+
+    # Backup user files
+    local backup_dir
+    backup_dir=$(mktemp -d)
+
+    # Files to preserve
+    local preserve_files=(
+        ".d-spec/project.md"
+        ".d-spec/roadmap.md"
+        ".d-spec/planning"
+    )
+
+    # Also preserve any master-plan files
+    for f in "${project_dir}"/.d-spec/*master-plan*.md; do
+        if [[ -f "$f" ]]; then
+            preserve_files+=("${f#${project_dir}/}")
+        fi
+    done
+
+    # Backup preserved files
+    for item in "${preserve_files[@]}"; do
+        if [[ -e "${project_dir}/${item}" ]]; then
+            mkdir -p "${backup_dir}/$(dirname "${item}")"
+            cp -R "${project_dir}/${item}" "${backup_dir}/${item}"
+        fi
+    done
+
+    # Remove old .d-spec (except planning which we backed up)
+    rm -rf "${project_dir}/.d-spec"
+
+    # Copy fresh templates
+    cp -R "${TEMPLATE_DIR}/.d-spec" "${project_dir}/"
+
+    # Restore preserved files
+    for item in "${preserve_files[@]}"; do
+        if [[ -e "${backup_dir}/${item}" ]]; then
+            rm -rf "${project_dir}/${item}"
+            cp -R "${backup_dir}/${item}" "${project_dir}/${item}"
+        fi
+    done
+
+    # Cleanup
+    rm -rf "${backup_dir}"
+
+    print_success "Templates updated to version ${VERSION}"
+    echo "Preserved: project.md, roadmap.md, master-plan files, and planning/ contents"
+}
+
+cmd_version() {
+    echo "d-spec version ${VERSION}"
+    echo "Templates: ${TEMPLATE_DIR}"
+
+    if command -v bd &> /dev/null; then
+        echo "Beads: $(bd version 2>/dev/null || echo 'installed')"
+    else
+        echo "Beads: not installed"
+    fi
+}
+
+# Main entry point
+main() {
+    if [[ $# -eq 0 ]]; then
+        usage
+        exit 0
+    fi
+
+    local cmd="$1"
+    shift
+
+    case "$cmd" in
+        init)
+            cmd_init "$@"
+            ;;
+        update)
+            cmd_update "$@"
+            ;;
+        version|--version|-v)
+            cmd_version
+            ;;
+        help|--help|-h)
+            usage
+            ;;
+        *)
+            print_error "Unknown command: $cmd"
+            usage
+            exit 1
+            ;;
+    esac
+}
+
+main "$@"
