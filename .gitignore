@@ -1,5 +1,5 @@
 .beads/
-.gitattributes
+/.gitattributes
 .ignore/
 .DS_Store
 **/.DS_Store
