@@ -288,11 +288,6 @@ cmd_init() {
     # Step 4: Commit and publish to GitHub as private repo
     commit_and_publish "${project_dir}" || print_warning "GitHub setup skipped (you can do this manually later)"
 
-    # Step 5: Run bd doctor --fix to set up git hooks and fix common issues
-    echo ""
-    print_info "Running bd doctor --fix..."
-    bd doctor --fix --yes
-
     echo ""
     print_success "d-spec initialized successfully!"
     echo ""
